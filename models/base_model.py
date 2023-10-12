@@ -2,8 +2,8 @@
 """
 Module for BaseModel class.
 """
-import uuid
 from datetime import datetime
+import uuid
 
 class BaseModel:
     """
@@ -17,7 +17,7 @@ class BaseModel:
     Public instance methods:
         __init__(self, *args, **kwargs): Initializes a new instance of the BaseModel class.
         __str__(): Returns a string representation of the instance.
-        save(): Updates the 'updated_at' attribute with the current datetime.
+        save(self): Updates the 'updated_at' attribute with the current datetime.
         to_dict(): Returns a dictionary representation of the instance.
     """
     def __init__(self, *args, **kwargs):
@@ -28,6 +28,7 @@ class BaseModel:
             *args: Unused.
             **kwargs: Dictionary of attributes for creating the instance.
         """
+        # Your initialization code here
         if kwargs:
             for key, value in kwargs.items():
                 if key != '__class__':
@@ -52,7 +53,9 @@ class BaseModel:
         """
         Updates the 'updated_at' attribute with the current datetime.
         """
+        from models import storage  # Import 'storage' here to avoid circular imports
         self.updated_at = datetime.now()
+        storage.save()  # Call storage.save to save changes to the file
 
     def to_dict(self):
         """
@@ -70,4 +73,3 @@ class BaseModel:
 # Test the BaseModel class
 if __name__ == "__main__":
     pass
-
