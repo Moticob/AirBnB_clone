@@ -5,6 +5,7 @@ Module for FileStorage class.
 import json
 import os
 from models.base_model import BaseModel
+from models.user import User
 
 class FileStorage:
     """
@@ -56,12 +57,18 @@ class FileStorage:
         """
         Deserializes the JSON file to __objects (only if the JSON file (__file_path) exists).
         """
-        if os.path.isfile(self.__file_path):
-            with open(self.__file_path, 'r', encoding='utf-8') as file:
-                loaded_objects = json.load(file)
-                for key, value in loaded_objects.items():
-                    class_name, obj_id = key.split('.')
-                    obj_data = value
-                    class_ = eval(class_name)
-                    new_obj = class_(**obj_data)
-                    self.__objects[key] = new_obj
+        try:
+            with open(FileStorage.__file_path, mode='r', encoding='utf-8') as file:
+                data = json.load(file)
+
+            for obj_id, obj_data in data.items():
+                obj_class = obj_data.get('__class')
+                if obj_class == 'BaseModel':
+                    obj = BaseModel(**obj_data)
+                elif obj_class == 'User':
+                    obj = User(**obj_data)
+                # Add other classes here if needed
+
+                self.__objects[obj_id] = obj
+        except Exception:
+            pass
