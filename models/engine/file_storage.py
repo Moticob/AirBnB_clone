@@ -70,5 +70,5 @@ class FileStorage:
                 # Add other classes here if needed
 
                 self.__objects[obj_id] = obj
-        except Exception:
+        except FileNotFoundError:
             pass
