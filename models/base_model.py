@@ -4,6 +4,8 @@ Module for BaseModel class.
 """
 from datetime import datetime
 import uuid
+import models
+
 
 class BaseModel:
     """
